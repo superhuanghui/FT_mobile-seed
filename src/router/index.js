@@ -1,15 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
-
+import TEST from '@/components/test'
 Vue.use(Router)
-
 export default new Router({
+// 后退后页面位置
+  scrollBehavior: () => ({
+    y: 0
+  }),
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'TEST',
+      component: TEST
     }
   ]
 })

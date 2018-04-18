@@ -1,25 +1,8 @@
 import Vue from 'vue'
 import FastClick from 'fastclick'
-import VueRouter from 'vue-router'
 import App from './App'
-import Home from './components/HelloFromVux'
-import HelloWorld from './components/HelloWorld'
-
 import 'lib-flexible'
-
-Vue.use(VueRouter)
-
-const routes = [{
-  path: '/',
-  component: Home
-}, {
-  path: '/hello',
-  component: HelloWorld
-}]
-
-const router = new VueRouter({
-  routes
-})
+import router from './router'
 
 FastClick.attach(document.body)
 
