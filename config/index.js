@@ -2,7 +2,7 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-04-18 11:23:26
  * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-04-18 11:23:26
+ * @Last Modified time: 2018-04-19 23:43:28
  */
 
 'use strict'
@@ -25,12 +25,11 @@ module.exports = {
     cacheBusting: true,
     cssSourceMap: false,
   },
-
   build: {
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: './',  // 不要绝对路径哦
     productionSourceMap: true,
     devtool: '#source-map',
     productionGzip: false,
