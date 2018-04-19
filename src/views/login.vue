@@ -1,8 +1,6 @@
 <template>
   <div class="page_container">
-    <div class="act_rules" @click="showRulesBox = true">
-			规则
-		</div>
+    <div class="act_rules" @click="showRulesBox = true">规则</div>
 		<div class="container_items">
 			<div class="item_container">
 				<div class="container_box">
@@ -40,7 +38,11 @@
       </div>
 		</div>
     <div class="dialog_rules">
-      <x-dialog v-model="showRulesBox" :scroll="false" :hide-on-blur="true">
+      <x-dialog v-model="showRulesBox"
+        :hide-on-blur="true">
+        <div class="rules_head text-center">
+          活动规则
+        </div>
         <div class="rules-box" @click="showRulesBox = false">
           <p class="rules_title">活动时间：</p>
           <p>2018年4月20日-2018年5月15日</p>
@@ -89,8 +91,7 @@ export default {
       if (!this.mobile) {
         this.$vux.toast.show({
           text: '请输入手机号',
-          type: 'cancel',
-          width: '8em'
+          type: 'cancel'
         })
         return false
       }
@@ -99,11 +100,10 @@ export default {
         mobile: this.mobile
       }).then(() => {
         this.$vux.toast.show({
-          text: '验证码已发送',
-          width: '8em'
+          text: '验证码已发送'
         })
       }).catch(() => {
-        console.log(1)
+
       })
 
       let auth_timetimer = setInterval(() => {
@@ -115,11 +115,23 @@ export default {
       }, 1000)
     },
     handleLogin() {
-      if (!this.name || !this.mobile || !this.validateCode) {
-        this.$vux.toast.show({
-          text: '请输入您的用户名/手机号/验证码',
-          type: 'cancel',
-          width: '18em'
+      if (!this.name) {
+        this.showToast({
+          text: '请输入您的用户名',
+          type: 'cancel'
+        })
+        return false
+      }
+      if (!this.mobile) {
+        this.showToast({
+          text: '请输入您的手机号',
+          type: 'cancel'
+        })
+        return false
+      }
+      if (!this.validateCode) {
+        this.showToast({
+          text: '请输入验证码'
         })
         return false
       }
@@ -193,7 +205,7 @@ export default {
 
 .dialog_rules .weui-dialog {
  max-width: 700px;
- overflow: auto;
+ overflow-y: scroll;
  width: 100%;
  border-radius: 20px;
  color: #333;

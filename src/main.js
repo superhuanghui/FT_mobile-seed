@@ -6,6 +6,7 @@ import 'lib-flexible'
 import router from './router'
 import { getSessionId, setSessionId } from '@/utils/auth'
 import { ToastPlugin } from 'vux'
+
 Vue.use(ToastPlugin, {position: 'middle'})
 
 FastClick.attach(document.body)
@@ -64,3 +65,17 @@ const vm = new Vue({
 })
 
 Vue.use(vm)
+
+Vue.prototype.showToast = function(params = {
+  text: '',
+  type: 'cancel',
+  position: 'middle',
+  width: 'auto'
+}) {
+  this.$vux.toast.show({
+    position: params.position,
+    text: params.text,
+    type: params.type,
+    width: params.width
+  })
+}

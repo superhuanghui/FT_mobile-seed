@@ -2,7 +2,7 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-04-18 11:23:26
  * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-04-19 23:43:28
+ * @Last Modified time: 2018-04-20 00:29:55
  */
 
 'use strict'
@@ -13,7 +13,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {},
-    host: 'localhost',
+    host: '192.168.5.163',
     port: 1314,
     autoOpenBrowser: true,
     errorOverlay: true,

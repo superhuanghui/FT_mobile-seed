@@ -2,7 +2,7 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-04-19 21:02:15
  * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-04-19 21:57:51
+ * @Last Modified time: 2018-04-20 01:19:27
  */
 
 import Vue from 'vue'
@@ -76,7 +76,8 @@ service.interceptors.response.use(
     }
     Vue.$vux.toast.show({
       text: '连接服务器失败',
-      type: 'cancel'
+      type: 'cancel',
+      width: 'auto'
     })
     return Promise.reject(error)
   }
@@ -100,13 +101,15 @@ const responseMehod = (response, resolve, reject) => {
   }
   Vue.$vux.toast.show({
     text: res.message || '未知错误，请联系管理员',
-    type: 'cancel'
+    type: 'cancel',
+    width: 'auto'
   })
   // sessionId 失效
   if (res.code * 1 === 1016) {
     Vue.$vux.toast.show({
       text: `${res.message}，请重新登录`,
-      type: 'cancel'
+      type: 'cancel',
+      width: 'auto'
     })
     logOutMethod()
   }

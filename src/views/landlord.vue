@@ -75,7 +75,7 @@
       </div>
 		</div>
     <div class="dialog_rules">
-      <x-dialog v-model="showRulesBox" :scroll="false"
+      <x-dialog v-model="showRulesBox"
         :hide-on-blur="true">
         <div class="rules_head text-center">
           活动规则
@@ -140,8 +140,7 @@ export default {
       if (this.activityStatus !== 3) {
         this.$vux.toast.show({
           text: '请在活动结束后进行申请',
-          type: 'cancel',
-          width: '13em'
+          type: 'cancel'
         })
         return false
       }
@@ -150,8 +149,7 @@ export default {
       }).then(() => {
         this.isApplyed = true
         this.$vux.toast.show({
-          text: '提现申请提交成功',
-          width: '10em'
+          text: '提现申请提交成功'
         })
       })
     }
@@ -182,19 +180,20 @@ export default {
   font-size: 24px;
 }
 .deliver_content .deliver {
- padding: 0 100px;
+  padding: 0 100px;
 }
 
 .dialog_rules .weui-dialog {
- max-width: 700px;
- overflow: auto;
- width: 100%;
- border-radius: 20px;
- color: #333;
- font-size: 20px;
- text-align: left;
- padding: 40px;
- background: rgba(255, 255, 255, 0.85)
+  position: absolute;
+  max-width: 700px;
+  overflow-y: scroll;
+  width: 100%;
+  border-radius: 20px;
+  color: #333;
+  font-size: 20px;
+  text-align: left;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.85)
 }
 .rules-box {
   overflow: auto;
