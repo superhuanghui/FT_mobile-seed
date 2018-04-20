@@ -17,7 +17,12 @@ const user = {
     Login({ commit }, userInfo) {
       const mobile = userInfo.mobile.trim()
       return new Promise((resolve, reject) => {
-        loginApi(mobile, userInfo.password).then(response => {
+        loginApi({
+          mobile,
+          name: userInfo.name,
+          validateCode: userInfo.validateCode,
+          devId: 'H5'
+        }).then(response => {
           const data = response.data
           setSessionId(data.sessionId)
           commit('SET_SESSIONID', data.sessionId)

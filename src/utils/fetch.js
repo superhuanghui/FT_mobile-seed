@@ -2,18 +2,13 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-04-19 21:02:15
  * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-04-20 01:19:27
+ * @Last Modified time: 2018-04-20 17:06:13
  */
 
 import Vue from 'vue'
 import axios from 'axios'
 import store from '../store'
 import { getSessionId } from '@/utils/auth'
-
-/* 防止重复提交，利用axios的cancelToken */
-let cancelPromise
-let requestPath = {}
-const CancelToken = axios.CancelToken
 
 /* 默认请求参数 */
 const defaultConfig = {
@@ -33,15 +28,6 @@ const service = axios.create({
 
 /* request拦截器 */
 service.interceptors.request.use(config => {
-  /* 发起请求时，取消掉当前正在进行的相同请求 */
-  const dataMethod = config.method.toUpperCase() === 'POST' ? config.data.method : config.params.method
-  const requestUrlAndMethod = (config.url.endsWith('/') ? config.url : `${config.url}/`) + dataMethod
-  if (requestPath[requestUrlAndMethod]) {
-    requestPath[requestUrlAndMethod]('取消重复请求')
-    requestPath[requestUrlAndMethod] = cancelPromise
-  } else {
-    requestPath[requestUrlAndMethod] = cancelPromise
-  }
   /* post请求 */
   if (config.method.toUpperCase() === 'POST') {
     if (store.getters.sessionId) {
@@ -116,13 +102,11 @@ const responseMehod = (response, resolve, reject) => {
   return reject('error')
 }
 
-const judgeMethod = (url, params, method = 'post') => {
-  const requestBody = {
+const judgeMethod = (url, params, method = 'post', config = {}) => {
+  let requestBody = {
+    ...config,
     method,
-    url,
-    cancelToken: new CancelToken(c => {
-      cancelPromise = c
-    })
+    url
   }
   if (method.toUpperCase() === 'POST') {
     requestBody.data = params

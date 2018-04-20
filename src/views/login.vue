@@ -49,13 +49,13 @@
           <p class="rules_title">参与方式：</p>
           <p>运营商（房东）进入活动页完善登录信息，点击“立即领取”并开通在线交租支付功能后，即可参与本活动；</p>
           <p class="rules_title">奖励方式和规则：</p>
-          <p>1、新开通奖励：活动期间，首次开通在线交租支付功能，并完成首次在线租房交易，每位运营商奖励可获得100元现金红包；</p>
+          <p>1、新开通奖励：活动期间，首次开通在线交租支付功能，并完成首次在线租房交易，每位运营商可获得100元现金红包奖励；</p>
           <p>2、新交易奖励：</p>
-          <p>(1) 凡活动期间，北京、上海、广州、深圳、杭州五城运营商（房东）完成在线租房交易，每笔交易订单，月租金须大于等于1500元；其他城市运营商（房东）完成在线租房交易，每笔交易订单，月租金需大于等于1000元 ；</p>
-          <p>(2) 满足以上条件，每间新签约的线上租房交易订单可获得50元现金红包，最高可获得10000元现金红包，每间新签约房间交易订单仅限享受一次奖励，活动期内签约又退房的订单不享受奖励；</p>
-          <p>(3) 新交易奖励，仅限活动期间，非在线交易转在线签约并完成交易支付的订单享受</p>
-          <p>3、如何提现：现金红包提现前，请确保已经绑定银行卡（企业用户请绑定对公账户），活动结束后，请运营商（房东）在活动领取页提交提现申请，现金奖励在7个工作日内一次性统一发放到开通在线交易绑定账号的银行卡；</p>
-          <p>4、活动期间务必保证开通线上交易支付功能、交易房源、交易行为真实性，活动期间将进行审核，发现有作弊行为，一律取消获得的活动权益；</p>
+          <p>(1) 每个线上新签约房间交易订单可获得50元现金红包，最高可获得10000元现金红包；</p>
+          <p>(2) 新交易奖励需满足以下条件：北京、上海、广州、深圳、杭州五个城市运营商（房东）完成在线新签约租房交易，且月租金大于等于1500元；其他城市运营商（房东）完成在线新签约租房交易，且月租金大于等于1000元 ；</p>
+          <p>(3) 新交易奖励，仅限活动期间新签约房间交易订单享受，每笔订单仅享受一次奖励，活动期内签约又退房的订单不享受奖励；/p>
+          <p>3、如何提现：现金红包提现前，请确保已经绑定银行卡（企业用户请绑定对公账户），活动结束后，请运营商（房东）在活动结束后3个工作日内在领取页提交提现申请，现金奖励在提交申请后7个工作日内一次性统一发放到开通在线交易绑定账号的银行卡；</p>
+          <p>4、活动期间务必保证开通线上交易支付功能、交易房源、交易行为真实性，活动期间将进行审核，发现有作弊行为，一律取消获得的活动奖励权益；</p>
           <p>5、本活动解释权归麦滴管家所有。</p>
         </div>
       </x-dialog>
@@ -66,6 +66,7 @@
 <script>
 import { Toast, XDialog } from 'vux'
 import { getValidateCodeApi } from '@/api/login'
+import { getWxShareInfo } from '@/utils/wxshare'
 
 export default {
   name: 'login',
@@ -83,8 +84,8 @@ export default {
       timerNum: 59
     }
   },
-  mounted() {
-
+  created() {
+    getWxShareInfo()
   },
   methods: {
     getValidateCode() {
@@ -97,7 +98,7 @@ export default {
       }
       this.disabled = true
       getValidateCodeApi({
-        mobile: this.mobile
+        mobile: this.mobile.trim()
       }).then(() => {
         this.$vux.toast.show({
           text: '验证码已发送'
@@ -138,11 +139,9 @@ export default {
       this.$store.dispatch('Login', {
         name: this.name,
         mobile: this.mobile,
-        password: '123456',
         validateCode: this.validateCode
       }).then((response) => {
-        // TODO
-        this.$router.push({ name: 'landlord', params: {landlordOrgId: -1} })
+        this.$router.push({ name: 'landlord' })
       }).catch(() => {
         console.log(1)
       })
@@ -204,15 +203,16 @@ export default {
 }
 
 .dialog_rules .weui-dialog {
- max-width: 700px;
- overflow-y: scroll;
- width: 100%;
- border-radius: 20px;
- color: #333;
- font-size: 20px;
- text-align: left;
- padding: 40px;
- background: rgba(255, 255, 255, 0.85)
+  position: fixed;
+  max-width: 700px;
+  overflow: auto;
+  width: 100%;
+  border-radius: 20px;
+  color: #333;
+  font-size: 20px;
+  text-align: left;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.85)
 }
 .rules-box {
   overflow: auto;

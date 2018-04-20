@@ -111,7 +111,7 @@ a:hover {
 			padding: 50px 70px;
 			color: #2963f6;
 			font-size: 28px;
-			font-weight: 700;
+      font-weight: 700;
 			&.noOnlinePay {
 				padding: 110px 0;
 			}
@@ -151,6 +151,7 @@ a:hover {
     }
     .scroll-content {
       height: 240px;
+      position: relative;
       overflow: auto;
     }
   }
@@ -188,6 +189,9 @@ a:hover {
 }
 .item_getCashPacket .item_money {
 	padding: 15px 0 0 0;
+}
+.area_block {
+  height: 100px;
 }
 .text-center{
 	text-align: center;

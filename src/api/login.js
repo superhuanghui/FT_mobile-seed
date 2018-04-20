@@ -2,19 +2,16 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-04-19 21:02:07
  * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-04-19 22:07:30
+ * @Last Modified time: 2018-04-20 14:33:49
  */
 
 import { fetch } from '@/utils/fetch'
 
 /* 登录获取sessionId */
-export function loginApi(mobile, password) {
-  return fetch('/user/', {
+export function loginApi(params = {}) {
+  return fetch('/landlord/login', {
     method: 'login',
-    params: {
-      mobile,
-      password
-    }
+    params
   })
 }
 
