@@ -131,7 +131,6 @@ export default {
     }
   },
   created() {
-    getWxShareInfo()
     getLandlordListApi({
       sessionId: this.$store.getters.sessionId
     }).then((response) => {
@@ -144,10 +143,14 @@ export default {
     })
   },
   mounted() {
-    // 非prod环境可清除缓存  方便测试
-    if (process.env.ENV_CONFIG !== 'prod') {
-      this.development = true
-    }
+    this.$nextTick(function() {
+      getWxShareInfo()
+      // 非prod环境可清除缓存  方便测试
+      console.log(process.env.ENV_CONFIG)
+      if (process.env.ENV_CONFIG !== 'prod') {
+        this.development = true
+      }
+    })
   },
   methods: {
     applyCash() {

@@ -1,26 +1,20 @@
-import Vue from 'vue'
-import { WechatPlugin } from 'vux'
+import wx from 'weixin-js-sdk'
 import { fetch } from '@/utils/fetch'
-
-Vue.use(WechatPlugin)
-
-const wx = Vue.wechat
 
 /**
  * 微信分享
  * @function: getWxShareInfo()
  * @default: shareData{}
  */
+
 const shareData = {
   title: '房东！您有10000元现金红包待领取！',
   introduction: '一波现金红包正在袭来，参与活动即可领取最高10000元现金奖励！滴滴一下，马上领取！',
-  thumbnail: 'https://www.mdguanjia.com/activities/md_share.png',
-  linkUrl: 'https://www.mdguanjia.com/activities/landlord/index.html'
+  thumbnail: 'https://www.mdguanjia.com/activities/md_share.jpg'
 }
-
 const getWxShareInfo = () => {
   fetch('https://www.mdguanjia.com/myhome/act/august/wechat.htm', {
-    url: shareData.linkUrl,
+    url: location.href.split('#')[0],
     callback: 'h5'
   }, 'get', {
     noAssign: true,
@@ -31,7 +25,7 @@ const getWxShareInfo = () => {
     }
     const response = data.dataObject
     wx.config({
-      debug: true,
+      debug: false,
       appId: response.appid,
       timestamp: response.timestamp,
       nonceStr: response.noncestr,

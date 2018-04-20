@@ -84,8 +84,10 @@ export default {
       timerNum: 59
     }
   },
-  created() {
-    getWxShareInfo()
+  mounted() {
+    this.$nextTick(function() {
+      getWxShareInfo()
+    })
   },
   methods: {
     getValidateCode() {
