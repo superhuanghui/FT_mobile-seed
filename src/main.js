@@ -26,11 +26,19 @@ if (location.search.indexOf('?') !== -1) {
 }
 
 if (urlSearchParams.sessionId) {
+  store.state.user.isApp = urlSearchParams.platform || urlSearchParams.appversion
+  store.state.user.appkeepLogin = store.state.user.isApp && urlSearchParams.sessionId === store.state.user.sessionId
   setSessionId(urlSearchParams.sessionId)
   store.state.user.sessionId = urlSearchParams.sessionId
 }
 
 router.beforeEach((to, from, next) => {
+  // APP 已登录
+  if (store.state.user.isApp) {
+    next()
+    return
+  }
+  // 已登录过
   if (getSessionId()) {
     if (to.path === '/login' || to.path === '/') {
       next('/landlord')

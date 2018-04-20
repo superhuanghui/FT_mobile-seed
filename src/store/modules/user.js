@@ -1,9 +1,16 @@
 import { loginApi } from '@/api/login'
 import { getSessionId, setSessionId, removeSessionId } from '@/utils/auth'
 
+/**
+ * @argument sessionId: 鉴权
+ * @argument isApp：来源是否为APP
+ * @argument appkeepLogin：App内保持登录状态
+ */
 const user = {
   state: {
-    sessionId: getSessionId()
+    sessionId: getSessionId(),
+    isApp: false,
+    appkeepLogin: false
   },
 
   mutations: {
