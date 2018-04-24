@@ -5,37 +5,28 @@
 			<div class="item_container">
 				<div class="container_box">
           <div class="container_login">
-            <div v-if="!isApp">
-              <div class="input_item">
-                <input type="text" placeholder="请输入您的用户名" v-model="name" />
-              </div>
-              <div class="input_item">
-                <input type="tel" placeholder="请输入您的手机号" v-model="mobile" />
-              </div>
-              <div class="input_item input_item-split" style="position: relative;">
-                <input type="text" placeholder="请输入验证码" v-model="validateCode" />
-                <button v-if="!disabled" type="button" class="btn btn_getValidateCode"
-                  :disabled="disabled" @click="getValidateCode">
-                  获取验证码
-                </button>
-                <button v-else type="button" class="btn btn_getValidateCode" disabled>
-                  {{timerNum}}s后重新获取
-                </button>
-              </div>
+            <div class="input_item">
+              <input type="text" placeholder="请输入您的姓名" v-model="name" />
             </div>
-            <div class="text-center landlordTips" v-else>
-              <div class="login_area_block"></div>
-              <p>房东，您好！</p>
-              <p>请仔细阅读活动规则，</p>
-              <p>有机会获得10000元现金奖励！</p>
-              <p>快点击下方【立即领取】参与吧！</p>
+            <div class="input_item">
+              <input type="tel" placeholder="请输入您的手机号" v-model="mobile" />
+            </div>
+            <div class="input_item input_item-split" style="position: relative;">
+              <input type="tel" placeholder="请输入验证码" v-model="validateCode" />
+              <button v-if="!disabled" type="button" class="btn btn_getValidateCode"
+                :disabled="disabled" @click="getValidateCode">
+                获取验证码
+              </button>
+              <button v-else type="button" class="btn btn_getValidateCode" disabled>
+                {{timerNum}}s后重新获取
+              </button>
             </div>
           </div>
 				</div>
 			</div>
       <div class="item_connect"></div>
       <div class="item_operate">
-        <div class="tips_box" v-if="!isApp">
+        <div class="tips_box">
           <p class="tips text-center">
             尚未注册麦滴管家的手机号，
           </p>
@@ -43,7 +34,6 @@
             登录自动注册，初始登录密码为123456
           </p>
         </div>
-        <div v-else class="login_area_block"></div>
         <div class="btn_applyCash text-center" @click="handleLogin">立即领取</div>
       </div>
 		</div>
@@ -74,7 +64,6 @@
 </template>
 
 <script>
-import store from '@/store'
 import { Toast, XDialog } from 'vux'
 import { getValidateCodeApi } from '@/api/login'
 import { getWxShareInfo } from '@/utils/wxshare'
@@ -92,15 +81,11 @@ export default {
       mobile: '',
       validateCode: '',
       disabled: false,
-      timerNum: 59,
-      isApp: true
+      timerNum: 59
     }
   },
   created() {
-    this.isApp = store.state.user.isApp
-    if (store.state.user.appkeepLogin) {
-      this.$router.push({ name: 'landlord' })
-    }
+
   },
   mounted() {
     this.$nextTick(function() {
@@ -110,7 +95,7 @@ export default {
   methods: {
     getValidateCode() {
       if (!this.mobile) {
-        this.$vux.toast.show({
+        this.showToast({
           text: '请输入手机号',
           type: 'cancel'
         })
@@ -119,37 +104,43 @@ export default {
       this.disabled = true
       getValidateCodeApi({
         mobile: this.mobile.trim()
-      }).then(() => {
-        this.$vux.toast.show({
-          text: '验证码已发送'
-        })
+      }).then((response) => {
+        if (response.code * 1 === 0) {
+          this.showToast({
+            text: '验证码已发送',
+            type: 'success'
+          })
+        } else {
+          this.showToast({
+            text: response.message,
+            type: 'cancel'
+          })
+          this.disabled = false
+          this.timerNum = 59
+        }
       }).catch(() => {
-
       })
 
       let auth_timetimer = setInterval(() => {
         this.timerNum--
         if (this.timerNum <= 0) {
           this.disabled = false
+          this.timerNum = 59
           clearInterval(auth_timetimer)
         }
       }, 1000)
     },
     handleLogin() {
-      if (this.isApp) {
-        this.$router.push({ name: 'landlord' })
-        return
-      }
       if (!this.name) {
         this.showToast({
-          text: '请输入您的用户名',
+          text: '请输入姓名',
           type: 'cancel'
         })
         return false
       }
       if (!this.mobile) {
         this.showToast({
-          text: '请输入您的手机号',
+          text: '请输入手机号',
           type: 'cancel'
         })
         return false

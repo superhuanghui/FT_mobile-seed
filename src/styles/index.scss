@@ -218,4 +218,10 @@ a:hover {
     text-shadow: -1px 0 #757575, 0 1px #757575, 1px 0 #757575, 0 -1px #757575;
     background-image: url('../assets/cutterman/bg_btn_disabled.png');
   }
+  &:focus{
+    color: #fff;
+  }
+  &:hover {
+    color: #fff;
+  }
 }

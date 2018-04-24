@@ -7,9 +7,9 @@ export function getSessionId() {
 }
 
 export function setSessionId(sessionId) {
-  return Cookies.set(SessionIdKey, sessionId)
+  return Cookies.set(SessionIdKey, sessionId, { path: '/', domain: 'mdguanjia.com' })
 }
 
 export function removeSessionId() {
-  return Cookies.remove(SessionIdKey)
+  return Cookies.remove(SessionIdKey, { path: '/' })
 }

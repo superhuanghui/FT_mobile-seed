@@ -2,7 +2,7 @@
  * @Author: FT.FE.Bolin
  * @Date: 2018-04-19 21:02:07
  * @Last Modified by: FT.FE.Bolin
- * @Last Modified time: 2018-04-20 14:33:49
+ * @Last Modified time: 2018-04-23 13:45:37
  */
 
 import { fetch } from '@/utils/fetch'
@@ -20,5 +20,7 @@ export function getValidateCodeApi(params = {}) {
   return fetch('/landlord/login', {
     method: 'sendCheckSms',
     params
+  }, 'post', {
+    interceptors: false
   })
 }

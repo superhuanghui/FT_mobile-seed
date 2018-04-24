@@ -4,14 +4,24 @@ import App from './App'
 import store from './store'
 import 'lib-flexible'
 import router from './router'
-import { getSessionId, setSessionId } from '@/utils/auth'
+import { setSessionId, getSessionId } from '@/utils/auth'
 import { ToastPlugin } from 'vux'
 
-Vue.use(ToastPlugin, { position: 'middle' })
+Vue.use(ToastPlugin)
 
 FastClick.attach(document.body)
 
 Vue.config.productionTip = false
+
+const vm = new Vue({
+  el: '#app-box',
+  router,
+  store,
+  template: '<App/>',
+  components: { App }
+})
+
+Vue.use(vm)
 
 const urlSearchParams = {}
 if (location.search.indexOf('?') !== -1) {
@@ -25,17 +35,35 @@ if (location.search.indexOf('?') !== -1) {
   }
 }
 
-if (urlSearchParams.sessionId) {
+const app_sessionId = unescape(urlSearchParams.sessionId || urlSearchParams.sessionid)
+if (app_sessionId && app_sessionId !== 'undefined') {
   store.state.user.isApp = urlSearchParams.platform || urlSearchParams.appversion
-  store.state.user.appkeepLogin = store.state.user.isApp && urlSearchParams.sessionId === store.state.user.sessionId
-  setSessionId(urlSearchParams.sessionId)
-  store.state.user.sessionId = urlSearchParams.sessionId
+  setSessionId(app_sessionId)
+  store.state.user.sessionId = app_sessionId
+}
+// APP 已登录
+if (store.state.user.isApp) {
+  vm.$router.push({ path: '/landlord' })
+} else {
+  // 非APP
+  // 已登录过
+  if (getSessionId()) {
+    vm.$router.push({ path: '/landlord' })
+  } else {
+    if (vm.$route.path !== '/login' && vm.$route.path !== '/') {
+      vm.$router.push({ path: '/' })
+    }
+  }
 }
 
 router.beforeEach((to, from, next) => {
   // APP 已登录
   if (store.state.user.isApp) {
-    next()
+    if (to.path === '/login' || to.path === '/') {
+      next('/landlord')
+    } else {
+      next()
+    }
     return
   }
   // 已登录过
@@ -72,16 +100,6 @@ router.afterEach((to, from, next) => {
     })()
   }, 0)
 })
-
-const vm = new Vue({
-  el: '#app-box',
-  router,
-  store,
-  template: '<App/>',
-  components: { App }
-})
-
-Vue.use(vm)
 
 /**
  * 挂载toast

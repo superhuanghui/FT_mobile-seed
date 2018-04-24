@@ -79,8 +79,7 @@
       <div class="text-center" v-else>
         <a class="btn_applyCash text-center onlinePayUrl" :href="onlinePayUrl">线上支付开通流程说明</a>
       </div>
-      <p v-if="development" class="btn_applyCash text-center onlinePayUrl" @click="clearSessionCash">没错！波哥来清除缓存~</p>
-      <p class="text-center service"><a class="callTel" href="tel:400-882-7099">客服协助热线：400-882-7099</a></p>
+      <p class="text-center service"><a class="callTel" :href="tellHref">客服协助热线：400-882-7099</a></p>
 		</div>
     <div class="dialog_rules">
       <x-dialog v-model="showRulesBox"
@@ -124,34 +123,37 @@ export default {
   data() {
     return {
       scrollList: [],
+      tellHref: 'tel:400-882-7099',
       onlinePayUrl: 'http://t.cn/RmTQxYe',
       firstOpenAcount: false,  // 首次
       onlinePay: false,  // 已开通线上支付
       rewardPrices: 0,  // 获取红包奖励
       showRulesBox: false,
-      development: false,
       isApplyed: false  // 申请提现
     }
   },
   created() {
-    getLandlordListApi({
-      sessionId: this.$store.getters.sessionId
-    }).then((response) => {
-      let data = response.data || {}
-      this.scrollList = data.list || []
-      this.firstOpenAcount = data.firstOpenAcount === 1
-      this.onlinePay = data.isOpen === 1
-      this.isApplyed = data.isApply === 1
-      this.rewardPrices = data.rewardPrices.toFixed(2)
-    })
+    if (store.state.user.isApp) {
+      this.tellHref = 'javascript:;'
+    }
+    if (store.state.user.sessionId) {
+      getLandlordListApi({
+        sessionId: store.state.user.sessionId
+      }).then((response) => {
+        let data = response.data || {}
+        this.scrollList = data.list || []
+        this.firstOpenAcount = data.firstOpenAcount === 1
+        this.onlinePay = data.isOpen === 1
+        this.isApplyed = data.isApply === 1
+        this.rewardPrices = data.rewardPrices.toFixed(2)
+      })
+    } else {
+      console.log('to login')
+    }
   },
   mounted() {
     this.$nextTick(function() {
       getWxShareInfo()
-      // 开发环境可清除缓存  方便测试
-      if (process.env.ENV_CONFIG !== 'prod') {
-        this.development = true
-      }
     })
   },
   methods: {
@@ -164,11 +166,6 @@ export default {
           text: '提现申请提交成功',
           type: 'success'
         })
-      })
-    },
-    clearSessionCash() {
-      store.dispatch('FedLogOut').then(() => {
-        location.reload() // 为了重新实例化vue-router对象 避免bug
       })
     }
   }
@@ -189,7 +186,7 @@ export default {
   padding-bottom: 40px;
 }
 .callTel {
-  font-size: 30px;
+  font-size: 24px;
 }
 .groupCell {
   line-height: 55px;
